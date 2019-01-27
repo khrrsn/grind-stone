@@ -1,0 +1,189 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"scopeName": "text.html.stone",
+	"name": "Grind Stone",
+	"fileTypes": [
+		"stone"
+	],
+	"injections": {
+		"L:text.html.stone - (meta.tag.template.stone | comment.block.stone)": {
+			"patterns": [
+				{ "include": "#comment" },
+				{ "include": "#output" },
+				{ "include": "#raw" },
+				{ "include": "#directives-with-args" },
+				{ "include": "#directives" },
+				{ "include": "#custom-directives-with-args" },
+				{ "include": "#custom-directives" },
+				{ "include": "#tagged-slot" },
+				{ "include": "#tagged-component" }
+			]
+		}
+	},
+	"patterns": [
+		{ "include": "text.html.basic" }
+	],
+	"repository": {
+		"comment": {
+			"begin": "{{--",
+			"beginCaptures": {
+				"0": { "name": "punctuation.definition.comment.stone" }
+			},
+			"end": "--}}",
+			"endCaptures": {
+				"0": { "name": "punctuation.definition.comment.stone" }
+			},
+			"name": "comment.block.stone"
+		},
+		"output": {
+			"begin": "\\{(!!)|(\\{\\{)-?",
+			"end": "-?(\\}?\\}\\})|(!!)\\}",
+			"captures": {
+				"0": { "name": "entity.name.tag.stone" }
+			},
+			"name": "meta.tag.template.stone",
+			"patterns": [
+				{ "include": "source.js" }
+			]
+		},
+		"raw": {
+			"begin": "@\\{\\{\\{?-?",
+			"end": "-?\\}?\\}\\}",
+			"captures": {
+				"0": { "name": "entity.name.tag.stone" }
+			},
+			"name": "meta.tag.template.stone",
+			"patterns": [
+				{ "include": "text.html.basic" }
+			]
+		},
+		"directives-with-args": {
+			"begin": "(\\s{0}|^)(\\@)\\b(asset|babel|block|break|coffee|component|continue|css|debug|dump|each|elseif|extends|for|foreach|forelse|hasSection|hassection|hasStack|hasstack|if|include|js|layout|less|macro|push|sass|scss|script|section|set|slot|stack|styl|style|stylus|unless|unlesshasstack|unlessHasStack|while|yield)\\b(?=(|\\s*|)\\()",
+			"beginCaptures": {
+				"0": { "name": "keyword.stone" }
+			},
+			"end": "(?<=\\))(?!.*\\))",
+			"name": "meta.tag.template.stone",
+			"patterns": [
+				{ "include": "source.js" }
+			]
+		},
+		"directives": {
+			"match": "(\\s{0}|^)(\\@)\\b(break|continue|else|empty|endblock|endcomponent|endfor|endforeach|endforelse|endif|endmacro|endpush|endsection|endhasstack|endslot|endspaceless|endunless|endunlesshasstack|endwhile|parent|setup|show|spaceless|super)\\b",
+			"captures": {
+				"0": { "name": "keyword.stone" }
+			},
+			"name": "meta.tag.template.stone"
+		},
+		"custom-directives-with-args": {
+			"begin": "(\\s{0}|^)(\\@)\\b([a-zA-Z_]+)\\b(?=(|\\s*|)\\()",
+			"beginCaptures": {
+				"0": { "name": "entity.name.function.stone" }
+			},
+			"end": "(?<=\\))(?!.*\\))",
+			"name": "meta.tag.template.stone",
+			"patterns": [
+				{ "include": "source.js" }
+			]
+		},
+		"custom-directives": {
+			"match": "(\\s{0}|^)(\\@)\\b([a-zA-Z_]+)\\b(\\s?)\\b",
+			"captures": {
+				"0": { "name": "entity.name.function.stone" }
+			},
+			"name": "meta.tag.template.stone"
+		},
+		"tagged-component": {
+			"begin": "(</?)(?!(?:a|abbr|address|area|article|aside|audio|b|bdi|bdo|blockquote|body|br|button|canvas|caption|cite|code|col|colgroup|content|data|datalist|dd|del|details|dfn|dialog|div|dl|dt|element|em|embed|fieldset|figcaption|figure|footer|form|h1–h6|header|hgroup|hr|html|i|img|input|ins|kbd|label|legend|li|link|main|map|mark|menu|menuitem|meta|meter|nav|noscript|object|ol|optgroup|option|output|p|param|pre|progress|q|rp|rt|rtc|ruby|s|samp|script|section|select|shadow|slot|small|source|span|strong|style|sub|summary|sup|table|tbody|td|template|textarea|tfoot|th|thead|time|tr|track|u|ul|var|video|wbr)\\b)([a-zA-Z0-9:-]+)",
+			"beginCaptures": {
+				"1": { "name": "punctuation.definition.tag.html" },
+				"2": { "name": "entity.name.tag.other.html" }
+			},
+			"end": ">",
+			"endCaptures": {
+				"1": { "name": "punctuation.definition.tag.end.html" }
+			},
+			"name": "meta.tag.block.evaluated.html",
+			"patterns": [
+				{
+					"include": "#tagged-component-attribute"
+				}
+			]
+		},
+		"tagged-slot": {
+			"begin": "(</?)(slot):([a-zA-Z0-9_]+)",
+			"beginCaptures": {
+				"1": { "name": "punctuation.definition.tag.html" },
+				"2": { "name": "entity.name.tag.other.html" },
+				"3": { "name": "entity.other.attribute-name.html" }
+			},
+			"end": ">",
+			"endCaptures": {
+				"1": { "name": "punctuation.definition.tag.end.html" }
+			},
+			"name": "meta.tag.block.slot.html"
+		},
+		"tagged-component-attribute": {
+			"patterns": [
+				{
+					"begin": "(?:^|\\s+)(([a-zA-Z0-9:\\-_.]+)\\s*(=)\\s*)",
+					"beginCaptures": {
+						"1": { "name": "entity.other.attribute-name.html" },
+						"2": { "name": "punctuation.separator.key-value.html" }
+					},
+					"end": "(?!\\G)|(?=\\s|/?>)",
+					"name": "meta.attribute-with-value.html",
+					"patterns": [
+						{
+							"begin": "{",
+							"end": "}",
+							"captures": {
+								"0": { "name": "entity.name.tag.stone.evaluated" }
+							},
+							"name": "string.evaluated.html",
+							"patterns": [
+								{ "include": "source.js" }
+							]
+						}, {
+							"begin": "\"",
+							"beginCaptures": {
+								"0": { "name": "punctuation.definition.string.begin.html" }
+							},
+							"end": "\"",
+							"endCaptures": {
+								"0": { "name": "punctuation.definition.string.end.html" }
+							},
+							"name": "string.quoted.double.html"
+						}, {
+							"begin": "'",
+							"beginCaptures": {
+								"0": { "name": "punctuation.definition.string.begin.html" }
+							},
+							"end": "'",
+							"endCaptures": {
+								"0": { "name": "punctuation.definition.string.end.html" }
+							},
+							"name": "string.quoted.single.html"
+						}
+					]
+				}, {
+					"begin": "(?:^|\\s+)(([a-zA-Z0-9:\\-_.]+))",
+					"end": "\\b",
+					"captures": {
+						"0": { "name": "entity.other.attribute-name.html" }
+					}
+				}, {
+					"begin": "\\{\\s*\\.{3}-?",
+					"end": "}",
+					"captures": {
+						"0": { "name": "entity.name.tag.stone.spread" }
+					},
+					"name": "string.spread.html",
+					"patterns": [
+						{ "include": "source.js" }
+					]
+				}
+			]
+		}
+	}
+}

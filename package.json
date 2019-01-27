@@ -1,0 +1,38 @@
+{
+    "name": "grind-stone",
+    "displayName": "Grind Stone",
+    "description": "Grind Stone syntax highlighting",
+    "version": "0.0.1",
+    "publisher": "khrrsn",
+    "engines": {
+        "vscode": "^1.30.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/khrrsn/grind-stone"
+      },
+      "bugs": {
+        "url": "https://github.com/khrrsn/grind-stone/issues",
+        "email": "keith@khrrsn.com"
+      },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "stone",
+            "aliases": ["Grind Stone", "Stone", "stone"],
+            "extensions": [".stone"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "stone",
+            "scopeName": "text.html.stone",
+            "path": "./syntaxes/stone.tmLanguage.json",
+            "embeddedLanguages": {
+                "source.css": "css",
+                "source.js": "javascript"
+            }
+        }]
+    }
+}
